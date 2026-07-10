@@ -40,7 +40,7 @@ void addContact()
 void viewContacts()
 {
     FILE *fp;
-    struct Contact c;
+    struct Contacts c;
 
     fp = fopen("contacts.dat", "rb");
 
@@ -54,7 +54,7 @@ void viewContacts()
     printf("%-20s %-15s %-30s\n", "Name", "Phone", "Email");
     printf("===============================================\n");
 
-    while (fread(&c, sizeof(struct Contact), 1, fp))
+    while (fread(&c, sizeof(struct Contacts), 1, fp))
     {
         printf("%-20s %-15s %-30s\n", c.name, c.phone, c.email);
     }
@@ -63,7 +63,46 @@ void viewContacts()
 
     fclose(fp);
 }
-void searchContact(){}
+void searchContact()
+{
+    FILE *fp;
+    struct Contacts c;
+    char searchName[50];
+    int found = 0;
+
+    fp = fopen("contacts.dat", "rb");
+
+    if (fp == NULL)
+    {
+        printf("\nNo contacts found!\n");
+        return;
+    }
+
+    printf("\nEnter Name to Search: ");
+    scanf(" %[^\n]", searchName);
+
+    while (fread(&c, sizeof(struct Contacts), 1, fp))
+    {
+        if (strcmp(c.name, searchName) == 0)
+        {
+            printf("\nContact Found!\n");
+            printf("-----------------------------\n");
+            printf("Name  : %s\n", c.name);
+            printf("Phone : %s\n", c.phone);
+            printf("Email : %s\n", c.email);
+
+            found = 1;
+            break;
+        }
+    }
+
+    if (found == 0)
+    {
+        printf("\nContact Not Found!\n");
+    }
+
+    fclose(fp);
+}
 void updateContact(){}
 void deleteContact(){}
 
