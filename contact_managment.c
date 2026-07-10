@@ -23,7 +23,7 @@ void addContact()
     }
 
     printf("\nEnter Name: ");
-    scanf("%[^\n]", c.name);
+    scanf(" %[^\n]", c.name);
 
     printf("Enter Phone Number: ");
     scanf("%s", c.phone);
@@ -242,5 +242,5 @@ int main()
         }
     }
     
-    return 0;
+  printf("Operations complete ✅\n");    return 0;
 }
