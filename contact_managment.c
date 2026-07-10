@@ -1,40 +1,68 @@
 #include <stdio.h>
-#include <strung.h>
+#include <string.h>
 #include <stdlib.h>
 
  struct Contacts{
   char name[50];
-  char phNumber[15];
+  char phone[15];
   char email[50];
 };
 
 
-void addContact(){
-  FILE* fp;
-  struct Contacts c;
-  fp = fopen("data.txt","ab");
-  
-  printf("Name: \n");
-  fgets(c.name,sizeof(c.name),stdin);
-  
-  printf("Phone Number: \n");
-  fgets(c.phNumber,sizeof(c.phNumber),stdin);
-  
-  printf("Email: \n");
-  fgets(c.email,sizeof(c.email),stdin);
-  
-  if(fp == NULL){
-    printf("Error opening File\n");
-    return 1;
-  }
-  
-  fwrite(&c, sizeof(struct Contacts), 1, fp);
-  fclose(fp);
-  
-  printf("Contacts Added successfully!!\n")
-  
+void addContact()
+{
+    FILE *fp;
+    struct Contacts c;
+
+    fp = fopen("contacts.dat", "ab");
+
+    if (fp == NULL)
+    {
+        printf("Error opening file!\n");
+        return;
+    }
+
+    printf("\nEnter Name: ");
+    scanf(" %[^\n]", c.name);
+
+    printf("Enter Phone Number: ");
+    scanf("%s", c.phone);
+
+    printf("Enter Email: ");
+    scanf("%s", c.email);
+
+    fwrite(&c, sizeof(struct Contacts), 1, fp);
+
+    fclose(fp);
+
+    printf("\nContact Added Successfully!\n");
 }
-void viewContacts(){}
+void viewContacts()
+{
+    FILE *fp;
+    struct Contact c;
+
+    fp = fopen("contacts.dat", "rb");
+
+    if (fp == NULL)
+    {
+        printf("\nNo contacts found!\n");
+        return;
+    }
+
+    printf("\n===============================================\n");
+    printf("%-20s %-15s %-30s\n", "Name", "Phone", "Email");
+    printf("===============================================\n");
+
+    while (fread(&c, sizeof(struct Contact), 1, fp))
+    {
+        printf("%-20s %-15s %-30s\n", c.name, c.phone, c.email);
+    }
+
+    printf("===============================================\n");
+
+    fclose(fp);
+}
 void searchContact(){}
 void updateContact(){}
 void deleteContact(){}
