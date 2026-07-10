@@ -152,7 +152,47 @@ void updateContact()
     else
         printf("\nContact Not Found!\n");
 }
-void deleteContact(){}
+void deleteContact()
+{
+    FILE *fp, *temp;
+    struct Contacts c;
+    char searchName[50];
+    int found = 0;
+
+    fp = fopen("contacts.dat", "rb");
+    temp = fopen("temp.dat", "wb");
+
+    if (fp == NULL || temp == NULL)
+    {
+        printf("\nError opening file!\n");
+        return;
+    }
+
+    printf("\nEnter Name to Delete: ");
+    scanf(" %[^\n]", searchName);
+
+    while (fread(&c, sizeof(struct Contacts), 1, fp))
+    {
+        if (strcmp(c.name, searchName) == 0)
+        {
+            found = 1;
+            continue;
+        }
+
+        fwrite(&c, sizeof(struct Contacts), 1, temp);
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    remove("contacts.dat");
+    rename("temp.dat", "contacts.dat");
+
+    if (found)
+        printf("\nContact Deleted Successfully!\n");
+    else
+        printf("\nContact Not Found!\n");
+}
 
 
 int main()
