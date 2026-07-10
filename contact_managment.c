@@ -23,7 +23,7 @@ void addContact()
     }
 
     printf("\nEnter Name: ");
-    scanf(" %[^\n]", c.name);
+    scanf("%[^\n]", c.name);
 
     printf("Enter Phone Number: ");
     scanf("%s", c.phone);
@@ -103,7 +103,55 @@ void searchContact()
 
     fclose(fp);
 }
-void updateContact(){}
+void updateContact()
+{
+    FILE *fp, *temp;
+    struct Contacts c;
+    char searchName[50];
+    int found = 0;
+
+    fp = fopen("contacts.dat", "rb");
+    temp = fopen("temp.dat", "wb");
+
+    if (fp == NULL || temp == NULL)
+    {
+        printf("\nError opening file!\n");
+        return;
+    }
+
+    printf("\nEnter Name to Update: ");
+    scanf(" %[^\n]", searchName);
+
+    while (fread(&c, sizeof(struct Contacts), 1, fp))
+    {
+        if (strcmp(c.name, searchName) == 0)
+        {
+            printf("\nEnter New Name: ");
+            scanf(" %[^\n]", c.name);
+
+            printf("Enter New Phone: ");
+            scanf("%s", c.phone);
+
+            printf("Enter New Email: ");
+            scanf("%s", c.email);
+
+            found = 1;
+        }
+
+        fwrite(&c, sizeof(struct Contacts), 1, temp);
+    }
+
+    fclose(fp);
+    fclose(temp);
+
+    remove("contacts.dat");
+    rename("temp.dat", "contacts.dat");
+
+    if (found)
+        printf("\nContact Updated Successfully!\n");
+    else
+        printf("\nContact Not Found!\n");
+}
 void deleteContact(){}
 
 
